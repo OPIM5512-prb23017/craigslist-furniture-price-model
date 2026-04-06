@@ -1,4 +1,3 @@
-# craigslist-furniture-price-model
 # Craigslist Furniture Price Prediction
 
 This project builds a Craigslist furniture scraping and modeling pipeline from scratch.
