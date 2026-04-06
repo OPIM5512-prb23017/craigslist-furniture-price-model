@@ -87,7 +87,7 @@ for item in items[:30]:  # limit to 30 for safety
 
 # =========================
 # SAVE TO CSV
-# =========================
+# ========================
 df = pd.DataFrame(rows)
 
 output_path = "results/raw_furniture_listings.csv"
