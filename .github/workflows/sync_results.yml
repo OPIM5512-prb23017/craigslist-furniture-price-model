@@ -1,1 +1,50 @@
+name: Sync Results
 
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run scraper
+        run: python scraper/scrape_furniture.py
+
+      - name: Run regex ETL
+        run: python etl/regex_extract.py
+
+      - name: Run llm ETL
+        run: python etl/llm_extract.py
+
+      - name: Materialize data
+        run: python etl/materialize.py
+
+      - name: Train model
+        run: python model/train_model.py
+
+      - name: Run interpretability
+        run: python model/interpretability.py
+
+      - name: Commit results
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add results/
+          git commit -m "update results" || echo "No changes"
+          git push
